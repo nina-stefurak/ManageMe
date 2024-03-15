@@ -4,6 +4,8 @@ interface Project {
     name: string;
     description: string;
 }
+let uuid = self.crypto.randomUUID();
+console.log(uuid);
 
 //klasa która komunikuje z Api localStorage
 class ProjectManager {
@@ -16,6 +18,7 @@ class ProjectManager {
 }
 
 //CRUD
+
 
 //dodanie projectu
 
