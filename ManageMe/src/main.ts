@@ -1,24 +1,100 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './css/style.css'
+import { ProjectManager } from './projects.ts'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const projectManager = new ProjectManager();
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+
+document.addEventListener('DOMContentLoaded', () => {
+  displayProjects();
+  const form = document.getElementById('project-form') as HTMLFormElement;
+  const projectNameInput = document.getElementById('project-name') as HTMLInputElement;
+  const projectDescriptionTextarea = document.getElementById('project-description') as HTMLTextAreaElement;
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Pobieram dane z formularza
+    const projectName = projectNameInput.value;
+    const projectDescription = projectDescriptionTextarea.value;
+
+
+    const newProject = projectManager.addProject(projectName, projectDescription);
+
+    console.log(newProject);
+
+
+    form.reset();
+    displayProjects(); 
+  });
+});
+
+function deleteProject(id: string): void {
+  projectManager.deleteProject(id);
+}
+
+function displayProjects(): void {
+  // pobieram projekty z ProjectManager i wyświetlam na stronie
+  const projects = projectManager.getAllProjects();
+  const projectsList = document.getElementById('projects-list') as HTMLUListElement;
+  projectsList.innerHTML = ''; // Czyszczimy liste
+
+  projects.forEach((project) => {
+    const listItem = document.createElement('div');
+    listItem.innerHTML = `
+      <div class="card">
+            <div class="card-header">
+              <input type="text" id="project-name-${project.id}" value="${project.name}" disabled>
+            </div>
+            <div class="card-body">
+            <textarea id="project-description-${project.id}" disabled>${project.description}</textarea>
+            </div>
+            <div class="card-footer">
+                <button id="delete-${project.id}">Delete</button> <button id="edit-${project.id}">Edit</button>
+            </div>
+          </div>
+      `;
+
+    projectsList.appendChild(listItem);
+
+    // Dodajemy listener 'click' do każdego przycisku usuwania projektu
+    const deleteButton = document.getElementById(`delete-${project.id}`);
+    if (deleteButton) {
+      deleteButton.addEventListener('click', () => {
+        deleteProject(project.id);
+        displayProjects(); // Odświeżam liste po usunięciu
+      });
+    }
+
+    const editButton = document.getElementById(`edit-${project.id}`);
+    if (editButton) {
+      editButton.addEventListener('click', () => {
+        enableEditing(project.id);
+      });
+    }
+  });
+}
+
+function enableEditing(id: string): void {
+  const projectNameInput = document.getElementById(`project-name-${id}`) as HTMLInputElement;
+  const projectDescriptionTextarea = document.getElementById(`project-description-${id}`) as HTMLTextAreaElement;
+
+  projectNameInput.disabled = false;
+  projectDescriptionTextarea.disabled = false;
+
+  // Zmieniam edit na save
+  const editButton = document.getElementById(`edit-${id}`) as HTMLButtonElement;
+  editButton.textContent = 'Save';
+  editButton.onclick = () => saveProject(id);
+}
+
+function saveProject(id: string): void {
+  const projectNameInput = document.getElementById(`project-name-${id}`) as HTMLInputElement;
+  const projectDescriptionTextarea = document.getElementById(`project-description-${id}`) as HTMLTextAreaElement;
+
+  const newName = projectNameInput.value;
+  const newDescription = projectDescriptionTextarea.value;
+
+  projectManager.updateProject(id, newName, newDescription);
+
+  displayProjects();
+}
