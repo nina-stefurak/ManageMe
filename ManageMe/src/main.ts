@@ -1,5 +1,16 @@
 import './css/style.css'
-import { ProjectManager } from './projects.ts'
+import { ProjectManager } from './model/projects.ts'
+import { UserManager } from './model/user.ts';
+import { ActiveProject } from './model/activeProject.ts'
+
+//generyczna klasa api
+//api generyczne
+
+const userManager = new UserManager();
+const loggedUser = userManager.getLoggedUser();
+
+console.log(loggedUser);
+
 
 const projectManager = new ProjectManager();
 
@@ -24,9 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     form.reset();
-    displayProjects(); 
+    displayProjects();
   });
 });
+
 
 function deleteProject(id: string): void {
   projectManager.deleteProject(id);
@@ -49,12 +61,21 @@ function displayProjects(): void {
             <textarea id="project-description-${project.id}" disabled>${project.description}</textarea>
             </div>
             <div class="card-footer">
-                <button id="delete-${project.id}">Delete</button> <button id="edit-${project.id}">Edit</button>
+            <button class="activeBtn" id="active-${project.id}">Active</button>    
+            <button id="delete-${project.id}">Delete</button> <button id="edit-${project.id}">Edit</button>
             </div>
           </div>
       `;
 
     projectsList.appendChild(listItem);
+
+    //dodaje listener do przycisku active 
+    const activeButton = document.getElementById(`active-${project.id}`);
+    if(activeButton){
+      activeButton.addEventListener('click', () => {
+        console.log("activeProject")
+      });
+    }
 
     // Dodajemy listener 'click' do każdego przycisku usuwania projektu
     const deleteButton = document.getElementById(`delete-${project.id}`);
