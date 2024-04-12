@@ -4,25 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <!-- <link rel="stylesheet" href="style.css"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ManageMe</title>
 </head>
 
 <body>
-  <div class="form">
-    <h2>Nowy projekt</h2>
-    <form id="project-form">
-      <input type="text" id="project-name" placeholder="Nazwa projektu" required>
-      <textarea id="project-description" placeholder="Opis projektu" required></textarea>
-      <button type="submit">Dodaj Projekt</button>
-    </form>
-  </div>
   <div class="container">
-
+    <div class="sidebar">
+    </div>
     <div class="content">
+
+      <div class="responsive-form">
+        <form id="project-form">
+          <input type="text" id="project-name" placeholder="Nazwa projektu" required>
+          <textarea id="project-description" placeholder="Opis projektu" required></textarea>
+          <button type="submit">Dodaj nowy projekt</button>
+        </form>
+      </div>
+
       <div class="list">
-        <h2>Moje projekty</h2>
+        <label>
+          Aktualny project:
+          <select id="projectSelect">
+          </select>
+        </label>
         <div id="projects-list">
         </div>
       </div>

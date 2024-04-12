@@ -1,10 +1,11 @@
 import './css/style.css'
 import { ProjectManager } from './model/projects.ts'
 import { UserManager } from './model/user.ts';
-import { ActiveProject } from './model/activeProject.ts'
+
 
 //generyczna klasa api
 //api generyczne
+
 
 const userManager = new UserManager();
 const loggedUser = userManager.getLoggedUser();
@@ -16,11 +17,43 @@ const projectManager = new ProjectManager();
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // select aktualny project 
+  const projectSelect = document.getElementById('projectSelect') as HTMLSelectElement;
+  if (!projectSelect) return;
+
+  const projectManager = new ProjectManager();
+  const projects = projectManager.getAllProjects();
+
+
+  projects.forEach(project => {
+    const option = document.createElement('option');
+    option.value = project.id;
+    option.textContent = project.name;
+    projectSelect.appendChild(option);
+  });
+
+  const currentProject = localStorage.getItem('currentProject');
+  if (currentProject) {
+    projectSelect.value = currentProject;
+  }
+
+  projectSelect.addEventListener('change', function () {
+    const selectedProjectId = this.value;
+    localStorage.setItem('currentProject', selectedProjectId);
+    console.log('Wybrany projekt:', selectedProjectId);
+    console.log('Zapisano w localStorage:', localStorage.getItem('currentProject'));
+    
+    displayProjects(); // Odświeżenie listy projektów
+  });
+
+
   displayProjects();
   const form = document.getElementById('project-form') as HTMLFormElement;
   const projectNameInput = document.getElementById('project-name') as HTMLInputElement;
   const projectDescriptionTextarea = document.getElementById('project-description') as HTMLTextAreaElement;
 
+  //formularz dodania projektu
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -30,6 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const newProject = projectManager.addProject(projectName, projectDescription);
+
+    // Dodanie nowego projektu do listy select
+    const newOption = document.createElement('option');
+    newOption.value = newProject.id;
+    newOption.textContent = newProject.name;
+    projectSelect.appendChild(newOption);
+    projectSelect.value = newProject.id; // nowo dodany projekt wybrany
 
     console.log(newProject);
 
@@ -50,6 +90,10 @@ function displayProjects(): void {
   const projectsList = document.getElementById('projects-list') as HTMLUListElement;
   projectsList.innerHTML = ''; // Czyszczimy liste
 
+  // ID aktualnego projektu
+  const currentProjectId = localStorage.getItem('currentProject');
+  console.log('Aktualny projekt z localStorage:', currentProjectId);
+
   projects.forEach((project) => {
     const listItem = document.createElement('div');
     listItem.innerHTML = `
@@ -61,21 +105,13 @@ function displayProjects(): void {
             <textarea id="project-description-${project.id}" disabled>${project.description}</textarea>
             </div>
             <div class="card-footer">
-            <button class="activeBtn" id="active-${project.id}">Active</button>    
-            <button id="delete-${project.id}">Delete</button> <button id="edit-${project.id}">Edit</button>
+            <button class="userStory" id="userStory-${project.id}">Funkcjonalności</button>    
+            <button id="delete-${project.id}">Usuń</button> <button id="edit-${project.id}">Edytuj</button>
             </div>
           </div>
       `;
 
     projectsList.appendChild(listItem);
-
-    //dodaje listener do przycisku active 
-    const activeButton = document.getElementById(`active-${project.id}`);
-    if(activeButton){
-      activeButton.addEventListener('click', () => {
-        console.log("activeProject")
-      });
-    }
 
     // Dodajemy listener 'click' do każdego przycisku usuwania projektu
     const deleteButton = document.getElementById(`delete-${project.id}`);

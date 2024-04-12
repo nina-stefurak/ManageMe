@@ -1,4 +1,6 @@
-interface Project {
+import { ProjectsApi } from './api.ts'
+
+export interface Project {
   id: string;
   name: string;
   description: string;
@@ -8,9 +10,10 @@ interface Project {
 class ProjectManager {
   private storageKey = 'projects';
 
+  private api = new ProjectsApi();
+
   getAllProjects(): Project[] { //metoda zwraca liste projektów
-    const projects = localStorage.getItem(this.storageKey);
-    return projects ? JSON.parse(projects) : []; //sprawdzenie i zwracanie danych
+      return this.api.getAllProjects();
   }
 
   //dodanie projectu
