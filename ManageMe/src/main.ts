@@ -2,11 +2,6 @@ import './css/style.css'
 import { ProjectManager } from './model/projects.ts'
 import { UserManager } from './model/user.ts';
 
-
-//generyczna klasa api
-//api generyczne
-
-
 const userManager = new UserManager();
 const loggedUser = userManager.getLoggedUser();
 
