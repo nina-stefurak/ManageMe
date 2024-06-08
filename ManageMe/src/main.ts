@@ -85,10 +85,6 @@ function displayProjects(): void {
   const projectsList = document.getElementById('projects-list') as HTMLUListElement;
   projectsList.innerHTML = ''; // Czyszczimy liste
 
-  // ID aktualnego projektu
-  const currentProjectId = localStorage.getItem('currentProject');
-  console.log('Aktualny projekt z localStorage:', currentProjectId);
-
   projects.forEach((project) => {
     const listItem = document.createElement('div');
     listItem.innerHTML = `

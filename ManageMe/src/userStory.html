@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/css/story.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <a href="#default" class="logo">Hello, user</a>
+        <div class="header-right">
+          <a href="index.html">Projekty</a>
+          <a class="active" href="userStory.html">Historyjki</a>
+          <a href="#about">Zadania</a>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="list">
+          <h2>Todo List</h2>
+          <div id="todo-column">
+          </div>
+        </div>
+        <div class="list">
+          <h2>In Progress List</h2>
+          <div id="progress-column">
+          </div>
+        </div>
+        <div class="list">
+          <h2>Completed List</h2>
+          <div id="completed-column">
+          </div>
+        </div>
+      </div>
+
+      <script type="module" src="/src/model/displayUserStory.ts"></script>
+    
+</body>
+</html>

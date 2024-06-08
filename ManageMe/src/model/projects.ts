@@ -12,8 +12,15 @@ class ProjectManager {
 
   private api = new ProjectsApi();
 
+  getCurrentProject() : Project {
+    const currentProjectId = localStorage.getItem('currentProject');
+    console.log('Aktualny projekt z localStorage:', currentProjectId);
+    const foundProject = this.getAllProjects().filter(project => project.id === currentProjectId)[0];
+    return foundProject;
+  }
+
   getAllProjects(): Project[] { //metoda zwraca liste projektów
-      return this.api.getAllProjects();
+    return this.api.getAllProjects();
   }
 
   //dodanie projectu
@@ -28,7 +35,7 @@ class ProjectManager {
     localStorage.setItem(this.storageKey, JSON.stringify(projects));
     return newProject;
   }
-  
+
   //edycja projektu
   updateProject(id: string, name: string, description: string): Project | null {
     const projects = this.getAllProjects();
