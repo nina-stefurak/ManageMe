@@ -2,6 +2,7 @@ interface User {
     id: string;
     username: string;
     email: string;
+    role: 'admin' | 'devops' | 'developer';
 }
 
 class UserManager {
@@ -12,7 +13,8 @@ class UserManager {
         this.user = {
             id: '1',
             username: 'Halouser',
-            email: 'halohalo@gmail.com'
+            email: 'halohalo@gmail.com',
+            role: 'admin'
         };
     }
 

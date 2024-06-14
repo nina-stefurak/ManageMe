@@ -11,14 +11,14 @@ console.log(loggedUser);
 const projectManager = new ProjectManager();
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
   // select aktualny project 
   const projectSelect = document.getElementById('projectSelect') as HTMLSelectElement;
   if (!projectSelect) return;
 
   const projectManager = new ProjectManager();
-  const projects = projectManager.getAllProjects();
+  const projects = await projectManager.getAllProjects();
 
 
   projects.forEach(project => {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const projectDescriptionTextarea = document.getElementById('project-description') as HTMLTextAreaElement;
 
   //formularz dodania projektu
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     // Pobieram dane z formularza
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectDescription = projectDescriptionTextarea.value;
 
 
-    const newProject = projectManager.addProject(projectName, projectDescription);
+    const newProject = await projectManager.addProject(projectName, projectDescription);
 
     // Dodanie nowego projektu do listy select
     const newOption = document.createElement('option');
@@ -75,13 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function deleteProject(id: string): void {
-  projectManager.deleteProject(id);
-}
-
-function displayProjects(): void {
+async function displayProjects() {
   // pobieram projekty z ProjectManager i wyświetlam na stronie
-  const projects = projectManager.getAllProjects();
+  const projects = await projectManager.getAllProjects();
   const projectsList = document.getElementById('projects-list') as HTMLUListElement;
   projectsList.innerHTML = ''; // Czyszczimy liste
 
@@ -107,8 +103,8 @@ function displayProjects(): void {
     // Dodajemy listener 'click' do każdego przycisku usuwania projektu
     const deleteButton = document.getElementById(`delete-${project.id}`);
     if (deleteButton) {
-      deleteButton.addEventListener('click', () => {
-        deleteProject(project.id);
+      deleteButton.addEventListener('click', async () => {
+        await projectManager.deleteProject(project.id);
         displayProjects(); // Odświeżam liste po usunięciu
       });
     }
@@ -135,14 +131,14 @@ function enableEditing(id: string): void {
   editButton.onclick = () => saveProject(id);
 }
 
-function saveProject(id: string): void {
+async function saveProject(id: string) {
   const projectNameInput = document.getElementById(`project-name-${id}`) as HTMLInputElement;
   const projectDescriptionTextarea = document.getElementById(`project-description-${id}`) as HTMLTextAreaElement;
 
   const newName = projectNameInput.value;
   const newDescription = projectDescriptionTextarea.value;
 
-  projectManager.updateProject(id, newName, newDescription);
+  await projectManager.updateProject(id, newName, newDescription);
 
   displayProjects();
 }

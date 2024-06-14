@@ -10,8 +10,9 @@ console.log(`Current project: ${JSON.stringify(projectManager.getCurrentProject(
 // storyManager.addStory("name2", "desc2", projectManager.getCurrentProject().id);
 // storyManager.addStory("name3", "desc3", projectManager.getCurrentProject().id);
 
+const stories = await storyManager.getAllStory();
 
-storyManager.getAllStory().forEach(story => {
+stories.forEach(story => {
     const card = `
     <div class="card">
     <div class="card-header">

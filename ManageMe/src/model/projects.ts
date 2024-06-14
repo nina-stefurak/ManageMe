@@ -1,4 +1,4 @@
-import { ProjectsApi } from './api.ts'
+import { ProjectsApi, LocalStorageProjectsApi } from './api.ts'
 
 export interface Project {
   id: string;
@@ -10,48 +10,37 @@ export interface Project {
 class ProjectManager {
   private storageKey = 'projects';
 
-  private api = new ProjectsApi();
+  private api : ProjectsApi = new LocalStorageProjectsApi();
 
-  getCurrentProject() : Project {
+  async getCurrentProject() : Promise<Project> {
     const currentProjectId = localStorage.getItem('currentProject');
     console.log('Aktualny projekt z localStorage:', currentProjectId);
-    const foundProject = this.getAllProjects().filter(project => project.id === currentProjectId)[0];
+    const projects = await this.getAllProjects();
+    const foundProject = projects.filter(project => project.id === currentProjectId)[0];
     return foundProject;
   }
 
-  getAllProjects(): Project[] { //metoda zwraca liste projektów
-    return this.api.getAllProjects();
+  async getAllProjects(): Promise<Project[]> { //metoda zwraca liste projektów
+    return await this.api.getAllProjects();
   }
 
   //dodanie projectu
-  addProject(name: string, description: string): Project {
+  async addProject(name: string, description: string): Promise<Project> {
     const newProject: Project = {
       id: crypto.randomUUID(),
       name,
       description,
     };
-    const projects = this.getAllProjects();
-    projects.push(newProject);
-    localStorage.setItem(this.storageKey, JSON.stringify(projects));
-    return newProject;
+    return await this.api.addProject(newProject);
   }
 
   //edycja projektu
-  updateProject(id: string, name: string, description: string): Project | null {
-    const projects = this.getAllProjects();
-    const projectIndex = projects.findIndex(project => project.id === id);
-    if (projectIndex !== -1) {
-      projects[projectIndex] = { id, name, description };
-      localStorage.setItem(this.storageKey, JSON.stringify(projects));
-      return projects[projectIndex];
-    }
-    return null;
+  async updateProject(id: string, name: string, description: string): Promise<Project|null> {
+      return await this.api.updateProject(id, name, description);
   }
   //usuwanie projektu
-  deleteProject(id: string): void {
-    const projects = this.getAllProjects();
-    const updatedProjects = projects.filter(project => project.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(updatedProjects));
+  async deleteProject(id: string): Promise<void> {
+    await this.api.deleteProject(id);
   }
 }
 
