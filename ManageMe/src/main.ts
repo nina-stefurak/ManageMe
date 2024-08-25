@@ -7,9 +7,7 @@ const loggedUser = userManager.getLoggedUser();
 
 console.log(loggedUser);
 
-
 const projectManager = new ProjectManager();
-
 
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -20,13 +18,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const projectManager = new ProjectManager();
   const projects = await projectManager.getAllProjects();
 
+  if(!!projects){
+    projects.forEach(project => {
+      const option = document.createElement('option');
+      option.value = project.id;
+      option.textContent = project.name;
+      projectSelect.appendChild(option);
+    });
+  }
 
-  projects.forEach(project => {
-    const option = document.createElement('option');
-    option.value = project.id;
-    option.textContent = project.name;
-    projectSelect.appendChild(option);
-  });
 
   const currentProject = localStorage.getItem('currentProject');
   if (currentProject) {

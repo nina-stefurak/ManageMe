@@ -13,6 +13,9 @@ export class LocalStorageProjectsApi implements ProjectsApi {
 
     async getAllProjects(): Promise<Project[]> { //metoda zwraca liste projektów
       const projects = localStorage.getItem(this.storageKey)!!;
+      if(!projects) {
+        return [];
+      }
       return JSON.parse(projects); //sprawdzenie i zwracanie danych
     }
 

@@ -4,7 +4,7 @@ import { StoryManager } from './userStory.ts';
 const projectManager = new ProjectManager();
 const storyManager = new StoryManager();
 
-console.log(`Current project: ${JSON.stringify(projectManager.getCurrentProject())}`)
+console.log(`Current project: ${JSON.stringify(await projectManager.getCurrentProject())}`)
 
 // storyManager.addStory("name1", "desc1", projectManager.getCurrentProject().id);
 // storyManager.addStory("name2", "desc2", projectManager.getCurrentProject().id);
