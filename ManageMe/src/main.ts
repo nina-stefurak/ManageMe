@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     form.reset();
     displayProjects();
+    localStorage.setItem('currentProject', projectSelect.value);
   });
 });
 
@@ -91,8 +92,7 @@ async function displayProjects() {
             <div class="card-body">
             <textarea id="project-description-${project.id}" disabled>${project.description}</textarea>
             </div>
-            <div class="card-footer">
-            <button class="userStory" id="userStory-${project.id}">Funkcjonalności</button>    
+            <div class="card-footer">  
             <button id="delete-${project.id}">Usuń</button> <button id="edit-${project.id}">Edytuj</button>
             </div>
           </div>
@@ -100,7 +100,7 @@ async function displayProjects() {
 
     projectsList.appendChild(listItem);
 
-    // Dodajemy listener 'click' do każdego przycisku usuwania projektu
+    // Dodaje listener 'click' do każdego przycisku usuwania projektu
     const deleteButton = document.getElementById(`delete-${project.id}`);
     if (deleteButton) {
       deleteButton.addEventListener('click', async () => {

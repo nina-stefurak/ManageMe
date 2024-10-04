@@ -10,23 +10,23 @@ export interface UserStory {
   createdAt: Date;
   ownerId: string;
 }
-
 class StoryManager {
   private api: UserStoryApi = new LocalStorageStoryApi();
 
-  async getAllStory(): Promise<UserStory[]> {
-    return await this.api.getAllStories();
+  async getAllStory(projectId: string): Promise<UserStory[]> {
+    const stories = await this.api.getAllStories();
+    return stories.filter(story => story.projectId === projectId);
   }
 
   //dodanie historyjki do projectu
-  async addStory(name: string, description: string, projectId: string): Promise<UserStory> {
+  async addStory(name: string, description: string, projectId: string, priority: any, status: any,): Promise<UserStory> {
     const newStory: UserStory = {
       id: crypto.randomUUID(),
       name,
       description,
       projectId: projectId,
-      priority: 'low',
-      status: 'todo',
+      priority: priority,
+      status: status,
       createdAt: new Date(),
       ownerId: 'Default'
     };

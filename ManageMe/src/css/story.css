@@ -3,8 +3,6 @@
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-
-    color: rgba(255, 255, 255, 0.87);  
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -19,6 +17,10 @@ body {
   h2 {
     color:rgb(42, 50, 60);
   }
+  
+  form {
+    margin: 20px;
+}
 
 .header {
     overflow: hidden;
@@ -68,9 +70,66 @@ body {
     }
   }
 
+  button {
+    border-radius: 8px;
+    background-color: rgb(252, 252, 253);
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  }
+  button:hover {
+    border-color: #d1e3d1;
+  }
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+
+  input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: rgb(252, 252, 253);
+}
+
+  .responsive-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* .responsive-form label {
+    display: block;
+    margin-bottom: 10px;
+  } */
+  
+  .responsive-form input[type="text"], .responsive-form input[type="email"], .responsive-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .responsive-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+  }
+   
+  label {
+    margin: 20px;
+  }
+
   .content {
     display: flex;
-    width: 100%;
     gap: 4rem;
     padding: 2.5rem;
   }

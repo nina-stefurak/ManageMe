@@ -8,8 +8,6 @@ export interface Project {
 
 //klasa która komunikuje z Api localStorage
 class ProjectManager {
-  private storageKey = 'projects';
-
   private api : ProjectsApi = new LocalStorageProjectsApi();
 
   async getCurrentProject() : Promise<Project> {

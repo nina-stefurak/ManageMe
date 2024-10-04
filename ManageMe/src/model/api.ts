@@ -57,7 +57,11 @@ export class LocalStorageStoryApi implements UserStoryApi{
 
   async getAllStories(): Promise<UserStory[]> {
     const story = localStorage.getItem(this.storageKey);
-    return story ? JSON.parse(story) : [];
+    const foundStories = story ? JSON.parse(story) : []; 
+    return foundStories.map((story : any) => {
+      story.createdAt = new Date(story.createdAt);
+      return story;
+  });
   }
 
   async addStory(userStory: UserStory): Promise<UserStory> {
