@@ -65,7 +65,7 @@ const displayUserStories = async () => {
       deleteButton.addEventListener('click', async () => {
         await storyManager.deleteStory(story.id);
         await displayUserStories();
-      });
+      })
     }
 
     //dodaje listener 'click' do przycisku edytuj

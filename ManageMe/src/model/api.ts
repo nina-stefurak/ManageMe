@@ -1,5 +1,6 @@
 import { Project } from './projects.ts'
 import { UserStory } from './userStory.ts';
+import { Task } from './tasks.ts';
 
 export interface ProjectsApi {
   getAllProjects(): Promise<Project[]>;
@@ -86,4 +87,47 @@ export class LocalStorageStoryApi implements UserStoryApi{
     localStorage.setItem(this.storageKey, JSON.stringify(updateStory));
   }
 
+}
+
+export interface TaskApi {
+  getAllTasks() : Promise<Task[]>;
+  addTask(task: Task) : Promise<Task>;
+  updateTask(id: string, name: string, description: string, projectId: string, priority: any,
+    status: any, createdAt: Date, ownerId: string) : Promise<Task>;
+    deleteTask(id: string) : Promise<void>;
+}
+
+export class LocalStorageTaskApi implements TaskApi {
+  private storageKey = 'task';
+
+  async getAllTasks() : Promise<Task[]> {
+    const task = localStorage.getItem(this.storageKey);
+    const foundTask = task ? JSON.parse(task): [];
+    return foundTask.map((task : any) => {
+      task.createdAt = new Date(task.createdAt);
+      return task;
+    });
+  }
+
+  async addTask(task: Task): Promise<Task> {
+      const tasks = await this.getAllTasks();
+      tasks.push(task);
+      localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    return task;
+  }
+  async updateTask(id: string, name: string, description: string, projectId: string, priority: any, status: any, createdAt: Date, ownerId: string): Promise<Task> {
+    const tasks = await this.getAllTasks();
+    const tasksIndex = tasks.findIndex(tasks => tasks.id === id);
+    if (tasksIndex !== -1) {
+      tasks[tasksIndex] = { id, name, description, projectId, priority, status, createdAt, ownerId };
+      localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+      return tasks[tasksIndex];
+    }
+    throw Error(`Unable to update story: ${id}`);
+  }
+  async deleteTask(id: string): Promise<void> {
+    const tasks = await this.getAllTasks();
+    const updateTask = tasks.filter( tasks => tasks.id !== id );
+    localStorage.setItem(this.storageKey, JSON.stringify(updateTask));
+  }
 }
